@@ -216,7 +216,7 @@ namespace DrawFRRLines
             foreach (Curve curve in wallCurve180)
             {
                 DetailCurve frrLine = doc.Create.NewDetailCurve(activeView, curve);
-                frrLine.LineStyle = gs120;
+                frrLine.LineStyle = gs180;
             }
 
             trans.Commit();
