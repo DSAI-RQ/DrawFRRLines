@@ -1,4 +1,8 @@
-﻿using System;
+﻿///This is a record of the code creation process prior to cleaning up the code.
+///This is where methods in the Revit API are tested as proof of concept.
+///December 31, 2020
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
