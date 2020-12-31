@@ -34,35 +34,34 @@ namespace DrawFRRLines
 
             //Wall storage lists
             IList<Wall> wallNone = new List<Wall>();
-            IList<Wall> wall00 = new List<Wall>();
-            IList<Wall> wall45 = new List<Wall>();
-            IList<Wall> wall60 = new List<Wall>();
-            IList<Wall> wall90 = new List<Wall>();
+            IList<Wall> wall000 = new List<Wall>();
+            IList<Wall> wall045 = new List<Wall>();
+            IList<Wall> wall060 = new List<Wall>();
+            IList<Wall> wall090 = new List<Wall>();
             IList<Wall> wall120 = new List<Wall>();
             IList<Wall> wall180 = new List<Wall>();
 
-            //Get parameter
+            //Sorting walls by parameter value
             foreach (Element wallElem in wallsView)
             {
                 Wall wallInst = wallElem as Wall;
                 Parameter fireRatingParam = wallInst.WallType.LookupParameter("Fire Rating");
                 String paramValue = fireRatingParam.AsString();
-                //Sorting walls in active view
                 if (paramValue == "00")
                 {
-                    wall00.Add(wallInst);
+                    wall000.Add(wallInst);
                 }
                 if (paramValue == "45")
                 {
-                    wall45.Add(wallInst);
+                    wall045.Add(wallInst);
                 }
                 if (paramValue == "60")
                 {
-                    wall60.Add(wallInst);
+                    wall060.Add(wallInst);
                 }
                 if (paramValue == "90")
                 {
-                    wall90.Add(wallInst);
+                    wall090.Add(wallInst);
                 }
                 if (paramValue == "120")
                 {
@@ -81,7 +80,7 @@ namespace DrawFRRLines
             //Get line styles in project
             Category linesCat = doc.Settings.Categories.get_Item(BuiltInCategory.OST_Lines);
 
-            ///Getting the Category and GraphicsStyle can probably be turned into a method
+            ///Getting the Category and GraphicsStyle can probably be turned into a function
 
             //FRR NON-RATED
             Category l000 = linesCat.SubCategories.get_Item("FIRE-000 Non-Rated Fire Separation");
@@ -107,26 +106,119 @@ namespace DrawFRRLines
             Category l180 = linesCat.SubCategories.get_Item("FIRE-180 3 Hour");
             GraphicsStyle gs180 = l180.GetGraphicsStyle(GraphicsStyleType.Projection);
 
-            //Get location curves
-            foreach (Element wallElem in wallsView)
+            //Curve storage list
+            IList<Curve> wallCurve000 = new List<Curve>();
+            IList<Curve> wallCurve045 = new List<Curve>();
+            IList<Curve> wallCurve060 = new List<Curve>();
+            IList<Curve> wallCurve090 = new List<Curve>();
+            IList<Curve> wallCurve120 = new List<Curve>();
+            IList<Curve> wallCurve180 = new List<Curve>();
+
+            ///Getting location curves can probably be turned into a function
+            //FRR NON-RATED: Get location curves
+            foreach (Element wallElem in wall000)
             {
                 Wall wallInst = wallElem as Wall;
                 LocationCurve lcurve = wallInst.Location as LocationCurve;
                 Curve curve = lcurve.Curve;
-                wallCurve.Add(curve);
+                wallCurve000.Add(curve);
+            }
+
+            //FRR 45 MIN: Get location curves
+            foreach (Element wallElem in wall045)
+            {
+                Wall wallInst = wallElem as Wall;
+                LocationCurve lcurve = wallInst.Location as LocationCurve;
+                Curve curve = lcurve.Curve;
+                wallCurve045.Add(curve);
+            }
+
+            //FRR 1H: Get location curves
+            foreach (Element wallElem in wall060)
+            {
+                Wall wallInst = wallElem as Wall;
+                LocationCurve lcurve = wallInst.Location as LocationCurve;
+                Curve curve = lcurve.Curve;
+                wallCurve060.Add(curve);
+            }
+
+            //FRR 1.5H: Get location curves
+            foreach (Element wallElem in wall090)
+            {
+                Wall wallInst = wallElem as Wall;
+                LocationCurve lcurve = wallInst.Location as LocationCurve;
+                Curve curve = lcurve.Curve;
+                wallCurve090.Add(curve);
+            }
+
+            //FRR 2H: Get location curves
+            foreach (Element wallElem in wall120)
+            {
+                Wall wallInst = wallElem as Wall;
+                LocationCurve lcurve = wallInst.Location as LocationCurve;
+                Curve curve = lcurve.Curve;
+                wallCurve120.Add(curve);
+            }
+
+            //FRR 3H: Get location curves
+            foreach (Element wallElem in wall180)
+            {
+                Wall wallInst = wallElem as Wall;
+                LocationCurve lcurve = wallInst.Location as LocationCurve;
+                Curve curve = lcurve.Curve;
+                wallCurve180.Add(curve);
             }
 
             //Transaction Reference
             Transaction trans = new Transaction(doc);
             trans.Start("Draw FRR Lines on Active View");
-            foreach (Curve i in wallCurve)
+            
+            ///Create new lines for each curve list
+            //FRR NON-RATED
+            foreach (Curve curve in wallCurve000)
             {
                 //Create new line
-                DetailCurve frrLine = doc.Create.NewDetailCurve(activeView, i);
+                DetailCurve frrLine = doc.Create.NewDetailCurve(activeView, curve);
 
                 //Set line style
+                frrLine.LineStyle = gs000;
+            }
+
+            //FRR 45 MIN
+            foreach (Curve curve in wallCurve045)
+            {
+                DetailCurve frrLine = doc.Create.NewDetailCurve(activeView, curve);
+                frrLine.LineStyle = gs045;
+            }
+
+            //FRR 1H
+            foreach (Curve curve in wallCurve060)
+            {
+                DetailCurve frrLine = doc.Create.NewDetailCurve(activeView, curve);
                 frrLine.LineStyle = gs060;
             }
+
+            //FRR 1.5H
+            foreach (Curve curve in wallCurve090)
+            {
+                DetailCurve frrLine = doc.Create.NewDetailCurve(activeView, curve);
+                frrLine.LineStyle = gs090;
+            }
+
+            //FRR 2H
+            foreach (Curve curve in wallCurve120)
+            {
+                DetailCurve frrLine = doc.Create.NewDetailCurve(activeView, curve);
+                frrLine.LineStyle = gs120;
+            }
+
+            //FRR 3H
+            foreach (Curve curve in wallCurve180)
+            {
+                DetailCurve frrLine = doc.Create.NewDetailCurve(activeView, curve);
+                frrLine.LineStyle = gs120;
+            }
+
             trans.Commit();
 
             return Result.Succeeded;
