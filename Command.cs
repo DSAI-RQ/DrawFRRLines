@@ -15,7 +15,7 @@ namespace DrawFRRLines
 {
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]
-    public class Class1 : IExternalCommand
+    public class Command : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet element)
         {
