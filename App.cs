@@ -25,7 +25,7 @@ namespace DrawFRRLines
             var globePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "FRR Lines.png");
 
             Uri uriImage = new Uri(globePath);
-            BitmapImage largeImage = new BitmapImage();
+            BitmapImage largeImage = new BitmapImage(uriImage);
             button.LargeImage = largeImage;
 
             return Result.Succeeded;
